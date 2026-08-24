@@ -30,7 +30,7 @@
         .comm-rate { font-weight: bold; font-size: 13px; }
         .row-data { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 5px; }
         .val-black { color: #333; font-weight: bold; }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-around: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #999; text-decoration: none; }
         .nav-item.active { color: #e30613; font-weight: bold; }
     </style>
@@ -96,7 +96,6 @@
     </div>
 
     <div class="bottom-nav">
-        <!-- LIEN CORRIGÉ ICI -->
         <a href="dashboard.html" class="nav-item"><i class="fas fa-sync-alt text-lg"></i><span>Commencer</span></a>
         <a href="investir.html" class="nav-item"><i class="fas fa-list-alt text-lg"></i><span>Investir</span></a>
         <a href="gains.html" class="nav-item"><i class="fas fa-chart-bar text-lg"></i><span>Gains</span></a>
@@ -110,7 +109,8 @@
         const db = firebase.database();
         const userId = localStorage.getItem('userId');
         
-        const platformLink = "https://batchnooivy.github.io/Kin-kin/";
+        // Redirection modifiée pour pointer directement vers register.html
+        const platformLink = "https://batchnooivy.github.io/Kin-kin/register.html";
 
         if (userId) {
             document.getElementById('invite-link').innerText = `${platformLink}?ref=${userId}`;
@@ -166,13 +166,19 @@
 
         function copyLink() {
             const link = document.getElementById('invite-link').innerText;
-            const tempInput = document.createElement("input");
-            tempInput.value = link;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand("copy");
-            document.body.removeChild(tempInput);
-            alert("Lien d'invitation copié !");
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(link).then(() => {
+                    alert("Lien d'invitation copié !");
+                });
+            } else {
+                const tempInput = document.createElement("input");
+                tempInput.value = link;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+                alert("Lien d'invitation copié !");
+            }
         }
     </script>
 </body>
